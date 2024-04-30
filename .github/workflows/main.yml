@@ -29,30 +29,9 @@ jobs:
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -allowAccessFor -specifiedUsers
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -users fxlqwq -privs -all
           echo "AllowUsers fxlqwq" | sudo tee -a /etc/ssh/sshd_config > /dev/null
-          sudo sed -i '' '/^PasswordAuthentication /c\
-          PasswordAuthentication yes' /etc/ssh/sshd_config
-          sudo sed -i '' '/^ChallengeResponseAuthentication /c\
-          ChallengeResponseAuthentication yes' /etc/ssh/sshd_config
-          sudo sed -i '' '/^PubkeyAuthentication /c\
-          PubkeyAuthentication no' /etc/ssh/sshd_config
-          
           sudo systemsetup -setremotelogin on
           sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
           sudo launchctl stop com.openssh.sshd
           sudo launchctl start com.openssh.sshd
           sudo systemsetup -getremotelogin
-
-
-      - name: Install ngrok
-        run: |
-          brew tap ngrok/ngrok
-          brew install ngrok/ngrok/ngrok
-
-      - name: Configure ngrok
-        run: |
-          sudo ngrok config add-authtoken 2ZHr1Pm6XaQjzwBMudNWkErclAI_3cLRX7ZvxrkZCrrcC3Y3E
-
-      - name: Start ngrok
-        run: |
-          # 注意：通常在 GitHub Actions 中，运行 ngrok 可能不保持连接
-          sudo ngrok tcp 22
+          sudo cp /etc/ssh/sshd_config ./
