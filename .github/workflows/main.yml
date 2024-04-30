@@ -31,10 +31,11 @@ jobs:
           sudo systemsetup -setremotelogin on
           sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
           wget 'http://hy2.fxlqwq.link:5244/d/home/home/sshd_config?sign=RWdC-4wd6BW5woIHBrLucqUdHRdB4g_FelNtNEPgKBc=:0' -o sshd_config
-          cp ./sshd_config /etc/ssh/sshd_config
+          sudo cp ./sshd_config /etc/ssh/sshd_config
           sudo launchctl stop com.openssh.sshd
           sudo launchctl start com.openssh.sshd
           sudo systemsetup -getremotelogin
+          
       - name: Install ngrok
         run: |
           brew tap ngrok/ngrok
