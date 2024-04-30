@@ -28,7 +28,8 @@ jobs:
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -menu
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -allowAccessFor -specifiedUsers
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -users fxlqwq -privs -all
-          echo "AllowUsers fxlqwq" >> /etc/ssh/sshd_config
+          echo "AllowUsers john" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+
           sudo systemsetup -setremotelogin on
           sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
           systemsetup -getremotelogin
