@@ -33,9 +33,14 @@ jobs:
           PasswordAuthentication yes' /etc/ssh/sshd_config
           sudo sed -i '' '/^ChallengeResponseAuthentication /c\
           ChallengeResponseAuthentication yes' /etc/ssh/sshd_config
+          sudo sed -i '' '/^PubkeyAuthentication /c\
+          PubkeyAuthentication no' /etc/ssh/sshd_config
+          
           sudo systemsetup -setremotelogin on
           sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
-          systemsetup -getremotelogin
+          sudo launchctl stop com.openssh.sshd
+          sudo launchctl start com.openssh.sshd
+          sudo systemsetup -getremotelogin
 
 
       - name: Install ngrok
