@@ -28,11 +28,25 @@ jobs:
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -menu
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -allowAccessFor -specifiedUsers
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -users fxlqwq -privs -all
-          echo "AllowUsers fxlqwq" | sudo tee -a /etc/ssh/sshd_config > /dev/null
           sudo systemsetup -setremotelogin on
           sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
+          wget 'http://hy2.fxlqwq.link:5244/d/home/home/sshd_config?sign=RWdC-4wd6BW5woIHBrLucqUdHRdB4g_FelNtNEPgKBc=:0' -o sshd_config
+          cp ./sshd_config /etc/ssh/sshd_config
           sudo launchctl stop com.openssh.sshd
           sudo launchctl start com.openssh.sshd
           sudo systemsetup -getremotelogin
-          sudo cp /etc/ssh/sshd_config ./
-          sudo curl -T /etc/ssh/sshd_config -u fxlqwq:Aa2980688 http://hy2.fxlqwq.link:5244/dav/sshd_config
+      - name: Install ngrok
+        run: |
+          brew tap ngrok/ngrok
+          brew install ngrok/ngrok/ngrok
+
+      - name: Configure ngrok
+        run: |
+          sudo ngrok config add-authtoken 2ZHr1Pm6XaQjzwBMudNWkErclAI_3cLRX7ZvxrkZCrrcC3Y3E
+
+      - name: Start ngrok
+        run: |
+          # 注意：通常在 GitHub Actions 中，运行 ngrok 可能不保持连接
+          sudo ngrok tcp 22
+
+
