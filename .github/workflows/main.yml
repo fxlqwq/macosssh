@@ -20,7 +20,10 @@ jobs:
           sudo dscl . -create /Users/fxlqwq UniqueID 5100
           sudo dscl . -create /Users/fxlqwq PrimaryGroupID 20
           sudo dscl . -create /Users/fxlqwq NFSHomeDirectory /Users/fxlqwq
+          sudo createhomedir -c -u fxlqwq
           sudo dscl . -passwd /Users/fxlqwq Aa135792468+-
+          sudo defaults write /Library/Preferences/com.apple.loginwindow HiddenUsersList -array-add fxlqwq
+          sudo dscl . create /Users/fxlqwq IsHidden 1
       - name: Install Homebrew
         run: |
           # 安装 Homebrew，如果已经安装，跳过这一步
